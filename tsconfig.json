@@ -1,12 +1,11 @@
 {
-  "compilerOptions": {
-    "baseUrl": "./src",
-    "paths": {
-      "*": ["types/*"]
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
     },
-    "jsx": "react-jsx", // o "react-jsx" dependiendo de la versión de TypeScript y React
-    // otras opciones que ya tengas...
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
 }
