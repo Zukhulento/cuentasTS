@@ -621,13 +621,13 @@ export const MainApp = () => {
         <Dialog
           header="Favor ingrese el valor del dolar actual"
           visible={tipoCambioVisible}
-          style={{ width: "50vw" }}
+          className="md:w-1/2"
           onHide={() => {
             if (!tipoCambioVisible) return;
             settipoCambioVisible(false);
           }}
         >
-          <div className="m-4 flex">
+          <div className="m-4 flex flex-col md:flex-row">
             <div className="flex-auto mx-auto text-center">
               <label
                 htmlFor="currency-dollar"
@@ -664,7 +664,7 @@ export const MainApp = () => {
                 locale="en-US"
               />
             </div>
-            <div className="flex-auto m-auto mb-0 text-center">
+            <div className="flex-auto mt-4 md:m-auto mb-0 text-center">
               <Button label="Guardar" onClick={guardarValorDolar} />
             </div>
           </div>
@@ -807,7 +807,7 @@ export const MainApp = () => {
       {
         //TODO Esta parte es de los toasts
       }
-      <Toast ref={toast} />
+      <Toast ref={toast} className="w-11/12 md:w-auto" />
       <ConfirmDialog />
     </div>
   );
