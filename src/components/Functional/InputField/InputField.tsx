@@ -6,6 +6,7 @@ interface InputFieldProps {
   onChange?: (e: any) => void;
   etiqueta: string;
   type?: string;
+  className?: string;
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -14,6 +15,7 @@ export const InputField: React.FC<InputFieldProps> = ({
   onChange,
   etiqueta = "Nombre por defecto",
   type = "text",
+  className = "",
 }) => {
   return (
     <>
@@ -24,6 +26,7 @@ export const InputField: React.FC<InputFieldProps> = ({
         value={valor}
         onChange={onChange}
         type={type}
+        className={`${className}`}
       />
     </>
   );
