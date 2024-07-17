@@ -256,8 +256,6 @@ export const MainApp = () => {
     let cantidadIngresos = Ingresos.length;
     // Ahora obtenemos el total de los egresos
     let cantidadEgresos = Egresos.length;
-    console.log("La cantidad de ingresos es: ", cantidadIngresos);
-    console.log("La cantidad de egresos es: ", cantidadEgresos);
     if (cantidadIngresos >= cantidadEgresos) {
       // El que sea mayor será el total de totales que existan
       // Recorriendo los ingresos
@@ -265,7 +263,6 @@ export const MainApp = () => {
         // Creando variables iniciales (Esto es por fila)
         let totalC = ingreso.valorC;
         let totalD = ingreso.valorD;
-        console.log("El total de Córdobas es: ", totalC);
         if (Egresos[index]) {
           // Si hay un egreso en la misma posición, se sumará
           totalC = (
@@ -284,7 +281,6 @@ export const MainApp = () => {
           valorC: totalC,
           valorD: totalD,
         };
-        console.log(NuevosTotales);
         setTotales(NuevosTotales);
       });
     } else {
@@ -292,7 +288,6 @@ export const MainApp = () => {
         // Creando variables iniciales (Esto es por fila)
         let totalC = -1 * parseFloat(egreso.valorC);
         let totalD = -1 * parseFloat(egreso.valorD);
-        console.log("El total de Córdobas es: ", totalC, " en la fila ", index);
         if (Ingresos[index]) {
           // Cambiando variables iniciales
           totalC = parseFloat(Ingresos[index].valorC) + totalC;
@@ -354,7 +349,6 @@ export const MainApp = () => {
       calcularTotales();
     }
   }, [Ingresos, Egresos, Ingresos.length, Egresos.length, Totales.length]);
-  // useEffect(() => {}, [TotalGlobal, Totales]);
   // Cada vez que se ponga a vibrar el botón de cambio de dolar
   useEffect(() => {
     if (Vibrar == true) {
