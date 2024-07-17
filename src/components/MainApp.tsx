@@ -425,7 +425,7 @@ export const MainApp = () => {
                     key={ingresoUnico.id}
                     className="grid grid-cols-5 w-full gap-2"
                   >
-                    <div className="col-span-2">
+                    <div className="col-span-2 flex flex-col justify-between">
                       <InputField
                         etiqueta={ingresoUnico.nombre}
                         nombre={ingresoUnico.nombre}
@@ -434,7 +434,7 @@ export const MainApp = () => {
                         className="w-full"
                       />
                     </div>
-                    <div className="col-span-2">
+                    <div className="col-span-2 flex flex-col justify-between">
                       <InputField
                         etiqueta={ingresoUnico.nombre + " en $"}
                         nombre={ingresoUnico.nombre + "D"}
@@ -454,7 +454,7 @@ export const MainApp = () => {
                       />
                     </div>
                     {i != Ingresos.length - 1 && (
-                      <span className="w-full border mt-2 md:hidden border-gray-300 "></span>
+                      <span className="col-span-5 w-full border mt-2 md:hidden border-gray-300 "></span>
                     )}
                   </div>
                 ))}
@@ -484,7 +484,7 @@ export const MainApp = () => {
                     key={egresoUnico.id}
                     className="grid grid-cols-5 w-full gap-2"
                   >
-                    <div className="col-span-2">
+                    <div className="col-span-2 flex flex-col justify-between">
                       <InputField
                         etiqueta={egresoUnico.nombre}
                         nombre={egresoUnico.nombre}
@@ -493,7 +493,7 @@ export const MainApp = () => {
                         className="w-full"
                       />
                     </div>
-                    <div className="col-span-2">
+                    <div className="col-span-2 flex flex-col justify-between">
                       <InputField
                         etiqueta={egresoUnico.nombre + " en $"}
                         nombre={egresoUnico.nombre + "D"}
@@ -513,7 +513,7 @@ export const MainApp = () => {
                       />
                     </div>
                     {i != Egresos.length - 1 && (
-                      <span className="w-full border mt-2 md:hidden border-gray-300 "></span>
+                      <span className="col-span-5 w-full border mt-2 md:hidden border-gray-300 "></span>
                     )}
                   </div>
                 ))}
