@@ -90,7 +90,7 @@ export const MainApp = () => {
   // Función para cambiar un egreso en especifico
   const cambiarEgreso = (e: any, tipoDolar: boolean) => {
     const { name, value } = e.target;
-    // Obteniendo el la posición del ingreso
+    // Obteniendo el la posición del egreso
     let posicion = null;
     let NuevoEgreso = null;
     if (tipoDolar) {
@@ -109,9 +109,9 @@ export const MainApp = () => {
       NuevoEgreso.valorD = (parseFloat(value) / ValorDolar).toFixed(2);
     }
     setEgresos([
-      ...Ingresos.slice(0, posicion),
+      ...Egresos.slice(0, posicion),
       NuevoEgreso,
-      ...Ingresos.slice(posicion + 1),
+      ...Egresos.slice(posicion + 1),
     ]);
   };
   // Función para mostrar el dialogo de ingreso
@@ -146,6 +146,8 @@ export const MainApp = () => {
     settipoCambioVisible(false);
     // Guardar el valor del dolar
     setValorDolar(CambioDolar ? CambioDolar : 0);
+    // Guardar el valor del dolar en el local storage
+    localStorage.setItem("valorDolar", CambioDolar.toString());
   };
   // Función para agregar un ingreso
   const agregarIngreso = () => {
@@ -248,10 +250,14 @@ export const MainApp = () => {
     // Variables que obtendrán los totales de las columnas
     let CCordobas = 0;
     let CDolares = 0;
+    // Totales
+    let NuevosTotales = [];
     // Primero obtenemos el total de los ingresos
     let cantidadIngresos = Ingresos.length;
     // Ahora obtenemos el total de los egresos
     let cantidadEgresos = Egresos.length;
+    console.log("La cantidad de ingresos es: ", cantidadIngresos);
+    console.log("La cantidad de egresos es: ", cantidadEgresos);
     if (cantidadIngresos >= cantidadEgresos) {
       // El que sea mayor será el total de totales que existan
       // Recorriendo los ingresos
@@ -259,6 +265,7 @@ export const MainApp = () => {
         // Creando variables iniciales (Esto es por fila)
         let totalC = ingreso.valorC;
         let totalD = ingreso.valorD;
+        console.log("El total de Córdobas es: ", totalC);
         if (Egresos[index]) {
           // Si hay un egreso en la misma posición, se sumará
           totalC = (
@@ -272,12 +279,12 @@ export const MainApp = () => {
         CCordobas += parseFloat(totalC);
         CDolares += parseFloat(totalD);
         // Guardando el total en el estado
-        let NuevosTotales = Totales;
         NuevosTotales[index] = {
           id: index + 1,
           valorC: totalC,
           valorD: totalD,
         };
+        console.log(NuevosTotales);
         setTotales(NuevosTotales);
       });
     } else {
@@ -285,6 +292,7 @@ export const MainApp = () => {
         // Creando variables iniciales (Esto es por fila)
         let totalC = -1 * parseFloat(egreso.valorC);
         let totalD = -1 * parseFloat(egreso.valorD);
+        console.log("El total de Córdobas es: ", totalC, " en la fila ", index);
         if (Ingresos[index]) {
           // Cambiando variables iniciales
           totalC = parseFloat(Ingresos[index].valorC) + totalC;
@@ -294,7 +302,6 @@ export const MainApp = () => {
         CCordobas += totalC;
         CDolares += totalD;
         // Guardando el total en el estado
-        let NuevosTotales = Totales;
         NuevosTotales[index] = {
           id: index + 1,
           valorC: totalC.toFixed(2),
@@ -320,14 +327,34 @@ export const MainApp = () => {
       valorD: "0",
     });
   };
+  // Función para eliminar un egreso específico
+  const deleteEgreso = (id: number) => {
+    let nuevoEgresos = Egresos.filter((egreso) => egreso.id !== id);
+    setEgresos(nuevoEgresos);
+  };
+  // Función para eliminar un ingreso específico
+  const deleteIngreso = (id: number) => {
+    let nuevoIngresos = Ingresos.filter((ingreso) => ingreso.id !== id);
+    setIngresos(nuevoIngresos);
+  };
+  // TODO Estos son los useEffect
+  // Cada vez que se empiece la aplicación
+  useEffect(() => {
+    // Obteniendo el valor del dolar
+    let valorDolar = localStorage.getItem("valorDolar");
+    if (valorDolar) {
+      setCambioDolar(parseFloat(valorDolar));
+      setValorDolar(parseFloat(valorDolar));
+    }
+  }, []);
   // Cada vez que cambie una columna se modificará esto
   useEffect(() => {
     // Calcular los totales
     if (Ingresos.length > 0 || Egresos.length > 0) {
       calcularTotales();
     }
-  }, [Ingresos, Egresos, Ingresos.length, Egresos.length]);
-  useEffect(() => {}, [TotalGlobal, Totales]);
+  }, [Ingresos, Egresos, Ingresos.length, Egresos.length, Totales.length]);
+  // useEffect(() => {}, [TotalGlobal, Totales]);
   // Cada vez que se ponga a vibrar el botón de cambio de dolar
   useEffect(() => {
     if (Vibrar == true) {
@@ -402,22 +429,34 @@ export const MainApp = () => {
                 {Ingresos.map((ingresoUnico, i) => (
                   <div
                     key={ingresoUnico.id}
-                    className="flex flex-col md:flex-row w-full gap-2"
+                    className="grid grid-cols-5 w-full gap-2"
                   >
-                    <div className="flex flex-col m-auto">
+                    <div className="col-span-2">
                       <InputField
                         etiqueta={ingresoUnico.nombre}
                         nombre={ingresoUnico.nombre}
                         valor={ingresoUnico.valorC}
                         onChange={(e) => cambiarIngreso(e, false)}
+                        className="w-full"
                       />
                     </div>
-                    <div className="flex flex-col m-auto">
+                    <div className="col-span-2">
                       <InputField
                         etiqueta={ingresoUnico.nombre + " en $"}
                         nombre={ingresoUnico.nombre + "D"}
                         valor={ingresoUnico.valorD}
                         onChange={(e) => cambiarIngreso(e, true)}
+                        className="w-full"
+                      />
+                    </div>
+                    <div className="relative">
+                      <Button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        onClick={() => {
+                          deleteIngreso(ingresoUnico.id);
+                        }}
+                        className="absolute bottom-0 "
                       />
                     </div>
                     {i != Ingresos.length - 1 && (
@@ -449,22 +488,34 @@ export const MainApp = () => {
                 {Egresos.map((egresoUnico, i) => (
                   <div
                     key={egresoUnico.id}
-                    className="flex flex-col md:flex-row w-full gap-2"
+                    className="grid grid-cols-5 w-full gap-2"
                   >
-                    <div className="flex flex-col m-auto">
+                    <div className="col-span-2">
                       <InputField
                         etiqueta={egresoUnico.nombre}
                         nombre={egresoUnico.nombre}
                         valor={egresoUnico.valorC}
                         onChange={(e) => cambiarEgreso(e, false)}
+                        className="w-full"
                       />
                     </div>
-                    <div className="flex flex-col m-auto">
+                    <div className="col-span-2">
                       <InputField
                         etiqueta={egresoUnico.nombre + " en $"}
                         nombre={egresoUnico.nombre + "D"}
                         valor={egresoUnico.valorD}
                         onChange={(e) => cambiarEgreso(e, true)}
+                        className="w-full"
+                      />
+                    </div>
+                    <div className="relative">
+                      <Button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        onClick={() => {
+                          deleteEgreso(egresoUnico.id);
+                        }}
+                        className="absolute bottom-0 "
                       />
                     </div>
                     {i != Egresos.length - 1 && (
